@@ -112,7 +112,7 @@ public class Jogo extends javax.swing.JFrame {
         lblEspada.setText((String)itens.getValueAt(h.getArmaIndice() -1, 0));
         
         if(v == null){
-            v = new Vilao("Monstro", 100, 10, 10, 10);
+            v = new Vilao("Monstro", 100, 10, 10);
         }
         
         h.setVida(100);

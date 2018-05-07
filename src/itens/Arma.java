@@ -16,9 +16,9 @@ public class Arma extends Item{
     
     private Status stats;
     
-    public Arma(String nome, int id, int a, int d, int ag, int peso) {
+    public Arma(String nome, int id, int a, int d, int peso) {
         super(nome, id, peso);
-        stats = new Status(a, d, ag);
+        stats = new Status(a, d);
     }
 
     public Status getStats() {

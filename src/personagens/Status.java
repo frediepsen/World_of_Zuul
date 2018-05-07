@@ -11,13 +11,13 @@ package personagens;
  */
 public class Status {
     private int attack;
-    private int defence;
-    private int agility;
+    private int defense;
+    //private int agility;
     
-    public Status(int attack, int defence, int agility){
+    public Status(int attack, int defense){
         this.attack = attack;
-        this.defence = defence;
-        this.agility = agility;
+        this.defense = defense;
+        //this.agility = agility;
     }
 
     public Status(){
@@ -31,20 +31,20 @@ public class Status {
         this.attack = attack;
     }
 
-    public int getDefence() {
-        return defence;
+    public int getDefense() {
+        return defense;
     }
 
-    public void setDefence(int defence) {
-        this.defence = defence;
+    public void setDefense(int defense) {
+        this.defense = defense;
     }
 
-    public int getAgility() {
-        return agility;
-    }
-
-    public void setAgility(int agility) {
-        this.agility = agility;
-    }
+//    public int getAgility() {
+//        return agility;
+//    }
+//
+//    public void setAgility(int agility) {
+//        this.agility = agility;
+//    }
     
 }

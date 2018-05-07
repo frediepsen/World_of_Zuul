@@ -12,9 +12,9 @@ public class Vilao extends Personagem{
     
     private Status stats;
     
-    public Vilao(String nome, int vidaMax, int a, int d, int ag) {
+    public Vilao(String nome, int vidaMax, int a, int d) {
         super(nome, vidaMax);
-        stats = new Status(a, d, ag);
+        stats = new Status(a, d);
     }
 
     public Status getStats() {

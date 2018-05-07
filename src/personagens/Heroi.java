@@ -33,8 +33,8 @@ public class Heroi extends Personagem{
     public Heroi(String nome, int level ,int vida, int a, int d, int ag, int pesoMax) {
         super(nome, vida);
         //this.vidaAtual = vidaAtual;
-        stats = new Status(a, d, ag);
-        iniciais = new Status(a, d, ag);
+        stats = new Status(a, d);
+        iniciais = new Status(a, d);
         this.level = level;
         this.pesoMax = pesoMax;
         mochila = new HashMap();
@@ -61,11 +61,11 @@ public class Heroi extends Personagem{
         if(armaEquipada){
             this.stats.setAttack(this.iniciais.getAttack());
             this.stats.setAttack(this.stats.getAttack() + a);
-            this.stats.setAgility(ag);
+            //this.stats.setAgility(ag);
         }
         if(!armaEquipada){
             this.stats.setAttack(stats.getAttack() + a);
-            this.stats.setAgility(ag);
+            //this.stats.setAgility(ag);
             armaEquipada = true;
         }
     }
@@ -73,7 +73,7 @@ public class Heroi extends Personagem{
     public void desequipaArma(int a){
         this.armaEquipada = false;
         this.stats.setAttack(this.stats.getAttack() - a);
-        this.stats.setAgility(10);
+        //this.stats.setAgility(10);
     }
     
     public int getArmaIndice() {
