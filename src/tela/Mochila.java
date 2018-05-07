@@ -67,9 +67,9 @@ public class Mochila extends javax.swing.JFrame {
                     model.addRow(rowData);
                     
                     ids.add(rs.getInt("id"));
-                    if(rs.getBoolean("equipado")){
-                        h.setArmaIndice(itens.getRowCount());
-                    }
+//                    if(rs.getBoolean("equipado")){
+//                        h.setArmaIndice(itens.getRowCount());
+//                    }
     
                     rs.next();
                 }while(!rs.isAfterLast());
@@ -163,32 +163,32 @@ public class Mochila extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEquipaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEquipaActionPerformed
-        if(h.isArmaEquipada()){
-            model.setValueAt(false, h.getArmaIndice() - 1, 4);
-            try {
-                st.executeQuery("UPDATE public.arma "
-                        +       "SET equipado = FALSE WHERE id = " + h.getArmaId() + ";");
-            } catch (SQLException ex) {
-                Logger.getLogger(Mochila.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        int l = itens.getSelectedRow();
-        
-        int a = (int) itens.getValueAt(l, 1);
-        int ag = (int) itens.getValueAt(l, 3);
-        
-        h.equipaArma(a, ag);
-        h.setArmaIndice(l);
-        
-        model.setValueAt(true, l, 4);
-        try {
-            st.executeQuery("UPDATE public.arma "
-                    +       "SET equipado = TRUE WHERE id = " + ids.get(l) + ";");
-        } catch (SQLException ex) {
-            Logger.getLogger(Mochila.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        porrada.setHeroi(h);
+//        if(h.isArmaEquipada()){
+//            model.setValueAt(false, h.getArmaIndice() - 1, 4);
+//            try {
+//                st.executeQuery("UPDATE public.arma "
+//                        +       "SET equipado = FALSE WHERE id = " + h.getArmaId() + ";");
+//            } catch (SQLException ex) {
+//                Logger.getLogger(Mochila.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//        int l = itens.getSelectedRow();
+//        
+//        int a = (int) itens.getValueAt(l, 1);
+//        int ag = (int) itens.getValueAt(l, 3);
+//        
+//        h.equipaArma(a, ag);
+//        h.setArmaIndice(l);
+//        
+//        model.setValueAt(true, l, 4);
+//        try {
+//            st.executeQuery("UPDATE public.arma "
+//                    +       "SET equipado = TRUE WHERE id = " + ids.get(l) + ";");
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Mochila.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        porrada.setHeroi(h);
     }//GEN-LAST:event_btnEquipaActionPerformed
 
     /**

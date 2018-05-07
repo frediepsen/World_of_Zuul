@@ -35,10 +35,10 @@ public class Jogo extends javax.swing.JFrame {
     private Connection con;
     private Statement st;
     private ResultSet rs;
-    private Object[] rowData = new Object[5];
-    private final String SLT_ARMA = "SELECT id, ataque, defesa, agilidade, peso, equipado\n" +
-                                    "  FROM public.arma\n" +
-                                    " WHERE equipado = TRUE;";
+    private Object[] rowData = new Object[4];
+//    private final String SLT_ARMA = "SELECT id, ataque, defesa, agilidade, peso, equipado\n" +
+//                                    "  FROM public.arma\n" +
+//                                    " WHERE equipado = TRUE;";
     /**
      * Creates new form Jogo
      */
@@ -49,30 +49,30 @@ public class Jogo extends javax.swing.JFrame {
             con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "username", "password");
             st = con.createStatement();
             
-            rs = st.executeQuery("SELECT nome, level, vida, ataque, defesa, agilidade, mochila FROM public.heroi " 
+            rs = st.executeQuery("SELECT name, level, xp, xp_max, attack, defense, life FROM heroi INNER JOIN stats ON heroi.stats = stats.id_stats" 
                     +            " WHERE id = 1;");
             
             rs.next();
             
-            String nome = rs.getString("nome");
-            int lvl = rs.getInt("level");
-            int vida = rs.getInt("vida");
-            int a = rs.getInt("ataque");
-            int d = rs.getInt("defesa");
-            int ag = rs.getInt("agilidade");
-            int p = rs.getInt("mochila");
+            String nome = rs.getString("name");
+            int level = rs.getInt("level");
+            int life = rs.getInt("life");
+            int att = rs.getInt("attack");
+            int def = rs.getInt("defense");
+            int xp = rs.getInt("xp");
+            int xp_max = rs.getInt("xp_max");
             
-            h = new Heroi(nome, lvl, vida, a, d, ag, p);
+            h = new Heroi(nome, level, life, att, def, xp, xp_max);
             
             
             
-            if(st.execute(SLT_ARMA)){
-                rs = st.executeQuery(SLT_ARMA);
-                rs.next();
-            
-                h.setArmaId(rs.getInt("id"));
-                h.equipaArma(rs.getInt("ataque"), rs.getInt("agilidade"));
-            }
+//            if(st.execute(SLT_ARMA)){
+//                rs = st.executeQuery(SLT_ARMA);
+//                rs.next();
+//            
+//                h.setArmaId(rs.getInt("id"));
+//                h.equipaArma(rs.getInt("ataque"), rs.getInt("agilidade"));
+//            }
             
             
             
@@ -88,29 +88,28 @@ public class Jogo extends javax.swing.JFrame {
             model = (DefaultTableModel)itens.getModel();
             
             if(itens.getRowCount() == 0){
-                rs = st.executeQuery("SELECT nome, ataque, defesa, agilidade, equipado FROM public.arma;");
+                rs = st.executeQuery("SELECT name, attack, defense, equipped FROM arma;");
                 
                 do{
                     rs.next();
                     
-                    rowData[0] = rs.getString("nome");
-                    rowData[1] = rs.getInt("ataque");
-                    rowData[2] = rs.getInt("defesa");
-                    rowData[3] = rs.getInt("agilidade");   
-                    rowData[4] = rs.getBoolean("equipado");
+                    rowData[0] = rs.getString("name");
+                    rowData[1] = rs.getInt("attack");
+                    rowData[2] = rs.getInt("defense");   
+                    rowData[3] = rs.getBoolean("equipped");
                     model.addRow(rowData);
                     
-                    if(rs.getBoolean("equipado")){
-                        h.setArmaIndice(itens.getRowCount() - 1);
-                    }
+//                    if(rs.getBoolean("equipado")){
+//                        h.setArmaIndice(itens.getRowCount() - 1);
+//                    }
                 }while(!rs.isAfterLast());
             }
         } catch (SQLException ex) {
             Logger.getLogger(Jogo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        lblEspada.setText((String)itens.getValueAt(h.getArmaIndice() -1, 0));
-        
+//        lblEspada.setText((String)itens.getValueAt(h.getArmaIndice() -1, 0));
+//        
         if(v == null){
             v = new Vilao("Monstro", 100, 10, 10);
         }
