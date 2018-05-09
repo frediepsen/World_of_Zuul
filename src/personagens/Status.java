@@ -6,18 +6,22 @@
 package personagens;
 
 /**
- *
  * @author USUARIO
  */
-public class Status {
+public abstract class Status {
     private int attack;
     private int defense;
-    //private int agility;
+    private int life;
     
     public Status(int attack, int defense){
         this.attack = attack;
         this.defense = defense;
-        //this.agility = agility;
+    }
+    
+    public Status(int attack, int defense, int life){
+        this.attack = attack;
+        this.defense = defense;
+        this.life = life;
     }
 
     public Status(){
@@ -39,12 +43,13 @@ public class Status {
         this.defense = defense;
     }
 
-//    public int getAgility() {
-//        return agility;
-//    }
-//
-//    public void setAgility(int agility) {
-//        this.agility = agility;
-//    }
+    public int getLife() {
+        return life;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+    
     
 }

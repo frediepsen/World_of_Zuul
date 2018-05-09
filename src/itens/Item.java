@@ -5,44 +5,17 @@
  */
 package itens;
 
+import personagens.Status;
+
 /**
  * @author USUARIO
  */
-public class Item {
-    private String nome;
-    
-    private int id;
-    
-    private int peso;
-    
-    public Item(String nome, int id, int peso){
-        this.nome = nome;
-        this.id = id;
-        this.peso = peso;
-    }
-    
-    public String getNome() {
-        return nome;
-    }
+public class Item extends Status{
+    private String name;
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-    
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getPeso() {
-        return peso;
-    }
-
-    public void setPeso(int peso) {
-        this.peso = peso;
+    public Item(String name, int att, int def) {
+        super(att, def);
+        this.name = name;
     }
     
     

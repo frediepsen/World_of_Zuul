@@ -23,15 +23,15 @@ public class Luta {
         v = vilao.sorte();
         
         if(h > v){
-            vilao.setVida(vilao.getVida() - heroi.getStats().getAttack());
+            vilao.setLife(vilao.getLife() - heroi.getAttack());
         }
         else{
             if(v > h){
-                heroi.setVida(heroi.getVida() - vilao.getStats().getAttack());
+                heroi.setLife(heroi.getLife() - vilao.getAttack());
             }
             else{
-                heroi.setVida(heroi.getVida() - vilao.getStats().getAttack());
-                vilao.setVida(vilao.getVida() - heroi.getStats().getAttack());
+                heroi.setLife(heroi.getLife() - vilao.getAttack());
+                vilao.setLife(vilao.getLife() - heroi.getAttack());
             }
         }
     }

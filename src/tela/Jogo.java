@@ -5,7 +5,6 @@
  */
 package tela;
 
-import itens.Arma;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -27,8 +26,6 @@ public class Jogo extends javax.swing.JFrame {
     private Heroi h;
     private Vilao v;
     private Luta porrada;
-    private Arma espada;
-    private final int ID_CON = 0;
     private DefaultTableModel model;
     private Connection con;
     private Statement st;
@@ -101,22 +98,22 @@ public class Jogo extends javax.swing.JFrame {
             v = new Vilao("Monstro", 100, 10, 10);
         }
         
-        h.setVida(100);
-        v.setVida(100);
+        h.setLife(100);
+        v.setLife(100);
         
         //info heroi
-        lblHeroi.setText(h.getNome());
-        pbVidaHeroi.setMaximum(h.getVida());
+        lblHeroi.setText(h.getName());
+        pbVidaHeroi.setMaximum(h.getLife());
         pbVidaHeroi.setMinimum(0);
-        pbVidaHeroi.setValue(h.getVida());
-        lblVidaH.setText(String.valueOf(h.getVida()));
+        pbVidaHeroi.setValue(h.getLife());
+        lblVidaH.setText(String.valueOf(h.getLife()));
         
         //info vilao
-        lblVilao.setText(v.getNome());
-        pbVidaVilao.setMaximum(v.getVida());
+        lblVilao.setText(v.getName());
+        pbVidaVilao.setMaximum(v.getLife());
         pbVidaVilao.setMinimum(0);
-        pbVidaVilao.setValue(v.getVida());
-        lblVidaV.setText(String.valueOf(v.getVida()));
+        pbVidaVilao.setValue(v.getLife());
+        lblVidaV.setText(String.valueOf(v.getLife()));
         
         porrada = new Luta(h, v);
         
@@ -279,16 +276,16 @@ public class Jogo extends javax.swing.JFrame {
     private void btnLutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLutaActionPerformed
         porrada.pancadaria();
         
-        pbVidaHeroi.setValue(h.getVida());
-        pbVidaVilao.setValue(v.getVida());
-        lblVidaH.setText(String.valueOf(h.getVida()));
-        lblVidaV.setText(String.valueOf(v.getVida()));
+        pbVidaHeroi.setValue(h.getLife());
+        pbVidaVilao.setValue(v.getLife());
+        lblVidaH.setText(String.valueOf(h.getLife()));
+        lblVidaV.setText(String.valueOf(v.getLife()));
         
-        if(h.getVida() <= 0){
+        if(h.getLife() <= 0){
             btnLuta.setEnabled(false);
             return;
         }
-        if(v.getVida() <= 0){
+        if(v.getLife() <= 0){
             btnLuta.setEnabled(false);
             return;
         }
@@ -297,22 +294,19 @@ public class Jogo extends javax.swing.JFrame {
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         btnLuta.setEnabled(true);
         
-        h.setVida(100);
-        v.setVida(100);
+        h.setLife(100);
+        v.setLife(100);
         
-        lblHeroi.setText(h.getNome());
-        pbVidaHeroi.setValue(h.getVida());
-        lblVidaH.setText(String.valueOf(h.getVida()));
+        lblHeroi.setText(h.getName());
+        pbVidaHeroi.setValue(h.getLife());
+        lblVidaH.setText(String.valueOf(h.getLife()));
         
-        lblVilao.setText(v.getNome());
-        pbVidaVilao.setValue(v.getVida());
-        lblVidaV.setText(String.valueOf(v.getVida()));
+        lblVilao.setText(v.getName());
+        pbVidaVilao.setValue(v.getLife());
+        lblVidaV.setText(String.valueOf(v.getLife()));
     }//GEN-LAST:event_btnStartActionPerformed
 
     private void btnMochilaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMochilaActionPerformed
-        Mochila m = new Mochila(h);
-        m.setPorrada(porrada);
-        m.setVisible(true);
     }//GEN-LAST:event_btnMochilaActionPerformed
 
     /**

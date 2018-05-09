@@ -5,24 +5,27 @@
  */
 package personagens;
 
+import java.util.Random;
+
 /**
  * @author USUARIO
  */
-public class Vilao extends Personagem{
+public class Vilao extends Status{
     
-    private Status stats;
+    private String name;
+    private Random r = new Random();
     
-    public Vilao(String nome, int vidaMax, int a, int d) {
-        super(nome, vidaMax);
-        stats = new Status(a, d);
+    public Vilao(String name, int vida, int att, int def) {
+        super(att, def, vida);
+        this.name = name;
     }
 
-    public Status getStats() {
-        return stats;
+    public String getName() {
+        return name;
     }
-
-    public void setStats(Status stats) {
-        this.stats = stats;
+    
+    public int sorte(){
+        return r.nextInt(9);
     }
     
 }
