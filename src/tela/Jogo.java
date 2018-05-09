@@ -6,7 +6,6 @@
 package tela;
 
 import itens.Arma;
-import itens.Consumivel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -28,7 +27,6 @@ public class Jogo extends javax.swing.JFrame {
     private Heroi h;
     private Vilao v;
     private Luta porrada;
-    private Consumivel pot;
     private Arma espada;
     private final int ID_CON = 0;
     private DefaultTableModel model;
@@ -49,8 +47,8 @@ public class Jogo extends javax.swing.JFrame {
             con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "username", "password");
             st = con.createStatement();
             
-            rs = st.executeQuery("SELECT name, level, xp, xp_max, attack, defense, life FROM heroi INNER JOIN stats ON heroi.stats = stats.id_stats" 
-                    +            " WHERE id = 1;");
+            rs = st.executeQuery("SELECT name, level, xp, xp_max, attack, defense, life, setup FROM heroi" 
+                               + " WHERE id = 1;");
             
             rs.next();
             
@@ -61,25 +59,14 @@ public class Jogo extends javax.swing.JFrame {
             int def = rs.getInt("defense");
             int xp = rs.getInt("xp");
             int xp_max = rs.getInt("xp_max");
+            long setup = rs.getInt("setup");
             
-            h = new Heroi(nome, level, life, att, def, xp, xp_max);
-            
-            
-            
-//            if(st.execute(SLT_ARMA)){
-//                rs = st.executeQuery(SLT_ARMA);
-//                rs.next();
-//            
-//                h.setArmaId(rs.getInt("id"));
-//                h.equipaArma(rs.getInt("ataque"), rs.getInt("agilidade"));
-//            }
-            
-            
-            
+            h = new Heroi(nome, level, life, att, def, xp, xp_max, setup);
+        
         } catch (SQLException ex) {
             Logger.getLogger(Jogo.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("bosta");
-            h = new Heroi("", 1, 1, 1, 1, 1, 1);
+            h = new Heroi("", 1, 1, 1, 1, 1, 1, 1);
         }
         
         try{

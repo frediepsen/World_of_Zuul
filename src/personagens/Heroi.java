@@ -7,7 +7,6 @@ package personagens;
 
 import java.util.HashMap;
 import itens.Arma;
-import itens.Item;
 
 /**
  * @author USUARIO
@@ -19,14 +18,16 @@ public class Heroi extends Personagem{
     private int level;
     private int xpMax;
     private int xp;
+    private Setup s;
     
-    public Heroi(String name, int level ,int life, int att, int def, int xp, int xp_max) {
+    public Heroi(String name, int level ,int life, int att, int def, int xp, int xp_max, long setup) {
         super(name, life);
         stats = new Status(att, def);
         iniciais = new Status(att, def);
         this.level = level;
         this.xp = xp;
         this.xpMax = xp_max;
+        s = new Setup(setup);
     }
 
 

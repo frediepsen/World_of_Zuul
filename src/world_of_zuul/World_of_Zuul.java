@@ -1,10 +1,4 @@
 package world_of_zuul;
-
-import itens.Consumivel;
-import itens.Arma;
-import personagens.Heroi;
-import personagens.Vilao;
-
 /**
  * @author USUARIO
  */
