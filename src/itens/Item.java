@@ -11,11 +11,22 @@ import personagens.Status;
  * @author USUARIO
  */
 public class Item extends Status{
+    
     private String name;
-
-    public Item(String name, int att, int def) {
+    private long id;
+    
+    public Item(long id, String name, int att, int def) {
         super(att, def);
         this.name = name;
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public long getId() {
+        return id;
     }
     
     

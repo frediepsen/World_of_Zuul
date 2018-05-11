@@ -5,6 +5,8 @@
  */
 package personagens;
 
+import itens.Item;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -26,6 +28,7 @@ public class Heroi extends Status{
         this.xp = xp;
         this.xpMax = xp_max;
         s = new Setup(setup);
+        equipAll();
     }
     
     public int getLevel() {
@@ -58,6 +61,29 @@ public class Heroi extends Status{
     
     public int sorte(){
         return r.nextInt(9);
+    }
+    
+    public void equip(int att, int def){
+        setAttack(getAttack() + att);
+        setDefense(getDefense() + def);
+    }
+
+    private void equipAll() {
+        for(Item i : s.getItens()){
+            equip(i.getAttack(), i.getDefense());
+        }
+    }
+    
+    public void xpUp(int xp){
+        this.xp += xp;
+        while(xp >= xpMax){
+            levelUp();
+        }
+    }
+    private void levelUp(){
+        level ++;
+        xp = xp - xpMax;
+        xpMax = xpMax + (int)(xpMax * 0.17);
     }
     
 }
