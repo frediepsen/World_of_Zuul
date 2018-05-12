@@ -7,7 +7,6 @@ package tela;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -101,10 +100,10 @@ public class Inicio extends javax.swing.JFrame {
         boolean b = false;
         
         try{
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "username", "password");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "postgres", "1234");
             Statement st = con.createStatement();
             
-            b = st.execute("SELECT id FROM heroi WHERE id = " + id + "AND password = " + senha + ";");
+            b = st.execute("SELECT id FROM herois WHERE id = " + id + " AND password = \'" + senha + "\';");
             
         }
         catch(Exception e){
@@ -116,6 +115,11 @@ public class Inicio extends javax.swing.JFrame {
             Jogo j = new Jogo(id);
             j.setVisible(true);
             this.setVisible(false);
+            try {
+                this.finalize();
+            } catch (Throwable ex) {
+                Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         else{
             lblErro.setText("Senha ou ID errado");

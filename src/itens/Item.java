@@ -15,13 +15,15 @@ public class Item extends Status{
     private String name;
     private long id;
     public enum Type {HEAD, CHEST, RHAND, LHAND, LEGS, ARMS, DHAND};
-    public Type type;
+    private Type type;
+    private boolean equipped;
     
     public Item(){};
     
     public Item(long id, String name, int att, int def, String tipo) {
         super(att, def);
         this.name = name;
+        this.equipped = false;
         this.id = id;
         if(tipo.equals("HEAD")){
             type = Type.HEAD;
@@ -64,6 +66,17 @@ public class Item extends Status{
     public long getId() {
         return id;
     }
-    
+
+    public Type getType() {
+        return type;
+    }
+
+    public boolean isEquipped() {
+        return equipped;
+    }
+
+    public void setEquipped(boolean equipped) {
+        this.equipped = equipped;
+    }
     
 }

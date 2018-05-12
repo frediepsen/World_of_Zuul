@@ -23,20 +23,22 @@ public class Heroi extends Status{
     private final int ID;
     private String name;
     private int level;
+    private int vidaAtual;
     private int xpMax;
     private int xp;
     private Setup setup;
     private Random r = new Random();
     private Bag bag;
     
-    private final String UPDATE1 = "UPDATE heroi SET ";
-    private final String UPDATE2 = "WHERE id_heroi = ";
+    private final String UPDATE1 = "UPDATE herois SET ";
+    private final String UPDATE2 = "WHERE id = ";
     
     public Heroi(int id, String name, int level ,int life, int att, int def, int xp, int xp_max, long setup, long bag) {
         super(att, def, life);
         this.ID = id;
         this.name = name;
         this.level = level;
+        this.vidaAtual = life;
         this.xp = xp;
         this.xpMax = xp_max;
         this.bag = new Bag(bag);
@@ -74,9 +76,19 @@ public class Heroi extends Status{
         xp = xp - xpMax;
         xpMax = xpMax + (int)(xpMax * 0.17);
     }
+
+    public int getVidaAtual() {
+        return vidaAtual;
+    }
+
+    public void setVidaAtual(int vidaAtual) {
+        this.vidaAtual = vidaAtual;
+    }
+    
+    
     
     public void equip(Item i){
-        switch(i.type){
+        switch(i.getType()){
             case HEAD:
                 setAttack(this.getAttack() - setup.getHead().getAttack() + i.getAttack());
                 setDefense(this.getDefense() - setup.getHead().getDefense() + i.getDefense());
@@ -116,7 +128,7 @@ public class Heroi extends Status{
     
     private void update(String campo){
         try{
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "username", "password");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "user", "pw");
             Statement st = con.createStatement();
             st.executeUpdate(UPDATE1 + campo + UPDATE2 + ID + ";");
             
@@ -126,5 +138,9 @@ public class Heroi extends Status{
             Logger.getLogger(Heroi.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("Erro no update/heroi");
         }
+    }
+    
+    public Bag getBag(){
+        return new Bag(bag);
     }
 }
