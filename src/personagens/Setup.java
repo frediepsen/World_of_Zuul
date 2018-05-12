@@ -11,33 +11,36 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import tela.Jogo;
 
 /**
  *
  * @author Usuario
  */
 public class Setup {
-    private long head;
-    private long chest;
-    private long rightHand;
-    private long leftHand;
-    private long legs;
-    private long arms;
-    private long id;
+    private Item head;
+    private Item chest;
+    private Item rightHand;
+    private Item leftHand;
+    private Item legs;
+    private Item arms;
     
-    private ArrayList<Item> itens;
+    private final long ID;
     
     
-    private final String LOAD = "SELECT head, chest, right_hand, left_hand, legs, arms FROM setup";
+    private final String LOAD = "SELECT head, chest, right_hand, left_hand, legs, arms FROM setup WHERE id_setup = ";
+    private final String UPDATE1 = "UPDATE setup SET ";
+    private final String UPDATE2 = "WHERE id_setup = ";
     
     public Setup(long id){
-        this.id = id;
-        itens = new ArrayList<>();
+        this.ID = id;
+        head = new Item();
+        chest = new Item();
+        rightHand = new Item();
+        leftHand = new Item();
+        legs = new Item();
+        arms = new Item();
         load();        
     }
     
@@ -45,61 +48,121 @@ public class Setup {
         try{
             Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "username", "password");
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(LOAD);
+            ResultSet rs = st.executeQuery(LOAD + ID + ";");
         
             Item i;
             rs.next();
             
+            long idHead = rs.getLong("head");
+            long idChest = rs.getLong("chest");
+            long idRightHand = rs.getLong("right_hand");
+            long idLeftHand = rs.getLong("left_hand");
+            long idLegs = rs.getLong("legs");
+            long idArms = rs.getLong("arms");
             
-            head = rs.getLong("head");
-            chest = rs.getLong("chest");
-            rightHand = rs.getLong("right_hand");
-            leftHand = rs.getLong("left_hand");
-            legs = rs.getLong("legs");
-            arms = rs.getLong("arms");
+            if(idHead > 0){
+                rs = st.executeQuery("SELECT attack, defense, name, tipo FROM itens WHERE id_item = " + idHead + ";");
+                i = new Item(idHead, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
+                head = i;
+            }
+            if(idChest > 0){
+                rs = st.executeQuery("SELECT attack, defense, name, tipoFROM itens WHERE id_item = " + idChest + ";");
+                i = new Item(idChest, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
+                chest = i;
+            }
+            if(idRightHand > 0){
+                rs = st.executeQuery("SELECT attack, defense, name, tipo FROM itens WHERE id_item = " + idRightHand + ";");
+                i = new Item(idRightHand, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
+                rightHand = i;
+            }
+            if(idLeftHand > 0){
+                rs = st.executeQuery("SELECT attack, defense, name, tipo FROM itens WHERE id_item = " + idLeftHand + ";");
+                i = new Item(idLeftHand, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
+                leftHand = i;
+            }
+            if(idLegs > 0){
+                rs = st.executeQuery("SELECT attack, defense, name, tipo FROM itens WHERE id_item = " + idLegs + ";");
+                i = new Item(idLegs, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
+                legs = i;
+            }
+            if(idArms > 0){
+                rs = st.executeQuery("SELECT attack, defense, name, tipo FROM itens WHERE id_item = " + idArms + ";");
+                i = new Item(idArms, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
+                arms = i;
+            }
             
-            if(head > 0){
-                rs = st.executeQuery("SELECT attack, defense, name FROM head WHERE id_head = " + head + ";");
-                i = new Item(head, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"));
-                itens.add(i);
-                
-            }
-            if(chest > 0){
-                rs = st.executeQuery("SELECT attack, defense, name FROM chest WHERE id_chest = " + chest + ";");
-                i = new Item(chest, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"));
-                itens.add(i);
-            }
-            if(rightHand > 0){
-                rs = st.executeQuery("SELECT attack, defense, name FROM right_hand WHERE id_right_hand = " + rightHand + ";");
-                i = new Item(rightHand, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"));
-                itens.add(i);
-            }
-            if(leftHand > 0){
-                rs = st.executeQuery("SELECT attack, defense, name FROM left_hand WHERE id_left_hand = " + leftHand + ";");
-                i = new Item(leftHand, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"));
-                itens.add(i);
-            }
-            if(legs > 0){
-                rs = st.executeQuery("SELECT attack, defense, name FROM legs WHERE id_legs = " + legs + ";");
-                i = new Item(legs, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"));
-                itens.add(i);
-            }
-            if(arms > 0){
-                rs = st.executeQuery("SELECT attack, defense, name FROM arms WHERE id_arms = " + arms + ";");
-                i = new Item(arms, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"));
-                itens.add(i);
-            }
+            con.close();
         
         }
         catch(SQLException e){
-            Logger.getLogger(Jogo.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(Setup.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("Erro no setup");
         }
         
         
     }
 
-    public ArrayList<Item> getItens() {
-        return new ArrayList<Item>(itens);
+    public Item getHead() {
+        return head;
+    }
+
+    public void setHead(Item head) {
+        update("head = " + head.getId());
+        
+        this.head = head;
+    }
+
+    public Item getChest() {
+        return chest;
+    }
+
+    public void setChest(Item chest) {
+        this.chest = chest;
+    }
+
+    public Item getRightHand() {
+        return rightHand;
+    }
+
+    public void setRightHand(Item rightHand) {
+        this.rightHand = rightHand;
+    }
+
+    public Item getLeftHand() {
+        return leftHand;
+    }
+
+    public void setLeftHand(Item leftHand) {
+        this.leftHand = leftHand;
+    }
+
+    public Item getLegs() {
+        return legs;
+    }
+
+    public void setLegs(Item legs) {
+        this.legs = legs;
+    }
+
+    public Item getArms() {
+        return arms;
+    }
+
+    public void setArms(Item arms) {
+        this.arms = arms;
+    }
+    
+    private void update(String campo){
+        try{
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "username", "password");
+            Statement st = con.createStatement();
+            st.executeUpdate(UPDATE1 + campo + UPDATE2 + ID + ";");
+            
+            con.close();
+        }
+        catch(Exception e){
+            Logger.getLogger(Setup.class.getName()).log(Level.SEVERE, null, e);
+            System.out.println("Erro no update");
+        }
     }
 }

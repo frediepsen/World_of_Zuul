@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.table.DefaultTableModel;
 import personagens.Heroi;
 import personagens.Vilao;
 import world_of_zuul.Luta;
@@ -26,80 +25,14 @@ public class Jogo extends javax.swing.JFrame {
     private Heroi h;
     private Vilao v;
     private Luta porrada;
-    private DefaultTableModel model;
-    private Connection con;
-    private Statement st;
-    private ResultSet rs;
-    private Object[] rowData = new Object[4];
-//    private final String SLT_ARMA = "SELECT id, ataque, defesa, agilidade, peso, equipado\n" +
-//                                    "  FROM public.arma\n" +
-//                                    " WHERE equipado = TRUE;";
+    
     /**
      * Creates new form Jogo
      */
-    public Jogo() {
+    public Jogo(int id) {
         initComponents();
-
-        try {
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "username", "password");
-            st = con.createStatement();
-            
-            rs = st.executeQuery("SELECT name, level, xp, xp_max, attack, defense, life, setup FROM heroi" 
-                               + " WHERE id = 1;");
-            
-            rs.next();
-            
-            String nome = rs.getString("name");
-            int level = rs.getInt("level");
-            int life = rs.getInt("life");
-            int att = rs.getInt("attack");
-            int def = rs.getInt("defense");
-            int xp = rs.getInt("xp");
-            int xp_max = rs.getInt("xp_max");
-            long setup = rs.getInt("setup");
-            
-            h = new Heroi(nome, level, life, att, def, xp, xp_max, setup);
-        
-        } catch (SQLException ex) {
-            Logger.getLogger(Jogo.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("bosta");
-            h = new Heroi("", 1, 1, 1, 1, 1, 1, 1);
-        }
-        
-        try{
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "username", "password");
-            st = con.createStatement();
-            model = (DefaultTableModel)itens.getModel();
-            
-            if(itens.getRowCount() == 0){
-                rs = st.executeQuery("SELECT name, attack, defense, equipped FROM arma;");
-                
-                do{
-                    rs.next();
-                    
-                    rowData[0] = rs.getString("name");
-                    rowData[1] = rs.getInt("attack");
-                    rowData[2] = rs.getInt("defense");   
-                    rowData[3] = rs.getBoolean("equipped");
-                    model.addRow(rowData);
-                    
-//                    if(rs.getBoolean("equipado")){
-//                        h.setArmaIndice(itens.getRowCount() - 1);
-//                    }
-                }while(!rs.isAfterLast());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Jogo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-//        lblEspada.setText((String)itens.getValueAt(h.getArmaIndice() -1, 0));
-//        
-        if(v == null){
-            v = new Vilao("Monstro", 100, 10, 10);
-        }
-        
-        h.setLife(100);
-        v.setLife(100);
+        loadHeroi(id);
+        loadVilao();
         
         //info heroi
         lblHeroi.setText(h.getName());
@@ -119,6 +52,39 @@ public class Jogo extends javax.swing.JFrame {
         
     }
 
+    private void loadHeroi(int id){
+        try {
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "username", "password");
+            Statement st = con.createStatement();
+            
+            ResultSet rs = st.executeQuery("SELECT name, level, xp, xp_max, attack, defense, life, setup, bag FROM heroi" 
+                               + " WHERE id = " + id + ";");
+            
+            rs.next();
+            
+            String nome = rs.getString("name");
+            int level = rs.getInt("level");
+            int life = rs.getInt("life");
+            int att = rs.getInt("attack");
+            int def = rs.getInt("defense");
+            int xp = rs.getInt("xp");
+            int xp_max = rs.getInt("xp_max");
+            long setup = rs.getInt("setup");
+            long bag = rs.getInt("bag");
+            
+            h = new Heroi(id ,nome, level, life, att, def, xp, xp_max, setup, bag);
+            
+            con.close();
+        
+        } catch (SQLException ex) {
+            Logger.getLogger(Jogo.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("erro load/jogo/heroi");
+        }
+    }
+    
+    public void loadVilao(){
+        
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -340,7 +306,7 @@ public class Jogo extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Jogo().setVisible(true);
+                //new Jogo().setVisible(true);
                 //World_of_Zuul a = new World_of_Zuul();
                 
             }
