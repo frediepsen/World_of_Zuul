@@ -76,6 +76,8 @@ public class Jogo extends javax.swing.JFrame {
             long bag = rs.getInt("bag");
             int gold = rs.getInt("gold");
             
+            System.out.println(xp);
+            
             h = new Heroi(id ,nome, level, life, att, def, xp, xp_max, setup, bag, gold);
             
         } catch (SQLException ex) {
@@ -99,7 +101,7 @@ public class Jogo extends javax.swing.JFrame {
             Logger.getLogger(Jogo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        v = horda.get(0);
+        v = new Vilao(horda.get(1));
     }
     
     /**
@@ -224,11 +226,6 @@ public class Jogo extends javax.swing.JFrame {
     private void btnLutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLutaActionPerformed
         porrada.pancadaria();
         
-        pbVidaHeroi.setValue(h.getVidaAtual());
-        pbVidaVilao.setValue(v.getLife());
-        lblVidaH.setText(String.valueOf(h.getVidaAtual()));
-        lblVidaV.setText(String.valueOf(v.getLife()));
-        
         if(h.getLife() <= 0){
             btnLuta.setEnabled(false);
         }
@@ -236,7 +233,9 @@ public class Jogo extends javax.swing.JFrame {
             h.increaseGold(v.getGold());
             h.increaseXp(v.getXp());
             Random r = new Random();
-            v = horda.get(r.nextInt(horda.size()));
+            v = new Vilao(horda.get(r.nextInt(horda.size())));
+            pbVidaVilao.setMaximum(v.getLife());
+            porrada.setVilao(v);
         }
         
         reload();

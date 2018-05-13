@@ -100,7 +100,7 @@ public class Inicio extends javax.swing.JFrame {
         boolean b = false;
         
         try{
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "user", "pw");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "fred", "fred1998");
             Statement st = con.createStatement();
             
             b = st.execute("SELECT id FROM herois WHERE id = " + id + " AND password = \'" + senha + "\';");

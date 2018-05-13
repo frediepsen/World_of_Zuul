@@ -17,6 +17,14 @@ public class Vilao extends Status{
     private final int xp;
     private Random r;
     
+    public Vilao(Vilao v) {
+        super(v.getAttack(), v.getDefense(), v.getLife());
+        this.name = v.name;
+        r  = new Random();
+        gold = v.gold;
+        xp = v.xp;
+    }
+    
     public Vilao(String name, int vida, int att, int def) {
         super(att, def, vida);
         this.name = name;

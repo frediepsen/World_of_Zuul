@@ -25,7 +25,7 @@ public class Connect {
     public Connect(){
         try {
             Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "user", "pw");
+            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "postgres", "1234");
             st = con.createStatement();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Connect.class.getName()).log(Level.SEVERE, null, ex);

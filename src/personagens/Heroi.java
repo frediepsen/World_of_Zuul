@@ -16,14 +16,14 @@ import tela.Jogo;
 public class Heroi extends Status{
     
     private final int ID;
-    private String name;
+    private final String name;
     private int level;
     private int vidaAtual;
     private int xpMax;
     private int xp;
-    private Setup setup;
+    private final Setup setup;
     private Random r = new Random();
-    private Bag bag;
+    private final Bag bag;
     private int gold;
     
     private final String UPDATE1 = "UPDATE herois SET ";
@@ -64,10 +64,11 @@ public class Heroi extends Status{
     
     public void increaseXp(int xp){
         this.xp += xp;
+        System.out.println(this.xp);
         while(xp >= xpMax){
             levelUp();
         }
-        update("xp_max = " + xpMax + ", xp = " + xp + ", level = " + level);
+        update("xp_max = " + xpMax + ", xp = " + this.xp + ", level = " + level);
     }
     private void levelUp(){
         level ++;
