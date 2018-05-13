@@ -7,13 +7,8 @@ package personagens;
 
 import itens.Bag;
 import itens.Item;
-import itens.Item.Type;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import tela.Jogo;
 
 /**
  * @author USUARIO
@@ -29,11 +24,12 @@ public class Heroi extends Status{
     private Setup setup;
     private Random r = new Random();
     private Bag bag;
+    private int gold;
     
     private final String UPDATE1 = "UPDATE herois SET ";
     private final String UPDATE2 = "WHERE id = ";
     
-    public Heroi(int id, String name, int level ,int life, int att, int def, int xp, int xp_max, long setup, long bag) {
+    public Heroi(int id, String name, int level ,int life, int att, int def, int xp, int xp_max, long setup, long bag, int gold) {
         super(att, def, life);
         this.ID = id;
         this.name = name;
@@ -41,6 +37,7 @@ public class Heroi extends Status{
         this.vidaAtual = life;
         this.xp = xp;
         this.xpMax = xp_max;
+        this.gold = gold;
         this.bag = new Bag(bag);
         this.setup = new Setup(setup);
     }
@@ -65,11 +62,12 @@ public class Heroi extends Status{
         return r.nextInt(9);
     }
     
-    public void xpUp(int xp){
+    public void increaseXp(int xp){
         this.xp += xp;
         while(xp >= xpMax){
             levelUp();
         }
+        update("xp_max = " + xpMax + ", xp = " + xp + ", level = " + level);
     }
     private void levelUp(){
         level ++;
@@ -84,8 +82,15 @@ public class Heroi extends Status{
     public void setVidaAtual(int vidaAtual) {
         this.vidaAtual = vidaAtual;
     }
+
+    public int getGold() {
+        return gold;
+    }
     
-    
+    public void increaseGold(int g){
+        this.gold += g;
+        update("gold = " + this.gold);
+    }
     
     public void equip(Item i){
         switch(i.getType()){
@@ -127,17 +132,7 @@ public class Heroi extends Status{
     }
     
     private void update(String campo){
-        try{
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "user", "pw");
-            Statement st = con.createStatement();
-            st.executeUpdate(UPDATE1 + campo + UPDATE2 + ID + ";");
-            
-            con.close();
-        }
-        catch(Exception e){
-            Logger.getLogger(Heroi.class.getName()).log(Level.SEVERE, null, e);
-            System.out.println("Erro no update/heroi");
-        }
+        Jogo.c.executaQ(UPDATE1 + campo + UPDATE2 + ID + ";");
     }
     
     public Bag getBag(){

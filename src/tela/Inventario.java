@@ -5,7 +5,6 @@
  */
 package tela;
 
-import itens.Bag;
 import itens.Item;
 import javax.swing.table.DefaultTableModel;
 import personagens.Heroi;
@@ -21,6 +20,7 @@ public class Inventario extends javax.swing.JFrame {
     private Heroi h;
     /**
      * Creates new form Inventario
+     * @param h
      */
     public Inventario(Heroi h) {
         initComponents();
@@ -56,6 +56,11 @@ public class Inventario extends javax.swing.JFrame {
         btnEquip = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         tbBag.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -134,6 +139,11 @@ public class Inventario extends javax.swing.JFrame {
         h.equip(h.getBag().findItemById(id));
         reload();
     }//GEN-LAST:event_btnEquipActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_formWindowClosed
 
     private void reload(){
         model.setColumnCount(0);

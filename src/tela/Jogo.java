@@ -5,11 +5,11 @@
  */
 package tela;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import connect.Connect;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import personagens.Heroi;
@@ -24,13 +24,15 @@ public class Jogo extends javax.swing.JFrame {
 
     private Heroi h;
     private Vilao v;
+    private ArrayList<Vilao> horda;
     private Luta porrada;
-    
+    public static Connect c;
     /**
      * Creates new form Jogo
      */
     public Jogo(int id) {
         initComponents();
+        c = new Connect();
         loadHeroi(id);
         loadVilao();
         
@@ -40,6 +42,9 @@ public class Jogo extends javax.swing.JFrame {
         pbVidaHeroi.setMinimum(0);
         pbVidaHeroi.setValue(h.getVidaAtual());
         lblVidaH.setText(String.valueOf(h.getLife()));
+        lblLife.setText("LIFE:" + h.getLife());
+        lblAtt.setText("ATT: " + h.getAttack());
+        lblDef.setText("DEF: " + h.getDefense());
         
         //info vilao
         lblVilao.setText(v.getName());
@@ -54,10 +59,8 @@ public class Jogo extends javax.swing.JFrame {
 
     private void loadHeroi(int id){
         try {
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "user", "pw");
-            Statement st = con.createStatement();
             
-            ResultSet rs = st.executeQuery("SELECT name, level, xp, xp_max, attack, defense, life, setup, bag FROM herois" 
+            ResultSet rs = c.getRS("SELECT name, level, xp, xp_max, attack, defense, life, setup, bag, gold FROM herois" 
                                + " WHERE id = " + id + ";");
             
             rs.next();
@@ -71,19 +74,32 @@ public class Jogo extends javax.swing.JFrame {
             int xp_max = rs.getInt("xp_max");
             long setup = rs.getInt("setup");
             long bag = rs.getInt("bag");
+            int gold = rs.getInt("gold");
             
-            h = new Heroi(id ,nome, level, life, att, def, xp, xp_max, setup, bag);
+            h = new Heroi(id ,nome, level, life, att, def, xp, xp_max, setup, bag, gold);
             
-            con.close();
-        
         } catch (SQLException ex) {
             Logger.getLogger(Jogo.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("erro load/jogo/heroi");
         }
     }
     
-    public void loadVilao(){
-        v = new Vilao("Monstro generico", 100, 20, 20);
+    private void loadVilao(){
+        horda = new ArrayList<>();
+        
+        ResultSet rs = c.getRS("SELECT name, life, attack, defense FROM vilao;");
+        try {
+            rs.next();
+            do{
+                horda.add(new Vilao(rs.getString("name"), rs.getInt("life"), rs.getInt("attack"), rs.getInt("defense")));
+                
+                rs.next();
+            }while(!rs.isAfterLast());
+        } catch (SQLException ex) {
+            Logger.getLogger(Jogo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        v = horda.get(0);
     }
     
     /**
@@ -104,9 +120,9 @@ public class Jogo extends javax.swing.JFrame {
         lblVidaH = new javax.swing.JLabel();
         lblVidaV = new javax.swing.JLabel();
         btnBag = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblLife = new javax.swing.JLabel();
+        lblAtt = new javax.swing.JLabel();
+        lblDef = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -134,11 +150,11 @@ public class Jogo extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("LIFE: ");
+        lblLife.setText("LIFE: ");
 
-        jLabel2.setText("ATT: ");
+        lblAtt.setText("ATT: ");
 
-        jLabel3.setText("DEF: ");
+        lblDef.setText("DEF: ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -152,9 +168,9 @@ public class Jogo extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(pbVidaHeroi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblHeroi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
+                    .addComponent(lblLife)
+                    .addComponent(lblAtt)
+                    .addComponent(lblDef))
                 .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnStart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -173,14 +189,14 @@ public class Jogo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnStart)
-                    .addComponent(jLabel1))
+                    .addComponent(lblLife))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnBag)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(lblAtt)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)))
+                        .addComponent(lblDef)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(56, 56, 56)
@@ -208,41 +224,61 @@ public class Jogo extends javax.swing.JFrame {
     private void btnLutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLutaActionPerformed
         porrada.pancadaria();
         
-        pbVidaHeroi.setValue(h.getLife());
+        pbVidaHeroi.setValue(h.getVidaAtual());
         pbVidaVilao.setValue(v.getLife());
-        lblVidaH.setText(String.valueOf(h.getLife()));
+        lblVidaH.setText(String.valueOf(h.getVidaAtual()));
         lblVidaV.setText(String.valueOf(v.getLife()));
         
         if(h.getLife() <= 0){
             btnLuta.setEnabled(false);
-            return;
         }
         if(v.getLife() <= 0){
-            btnLuta.setEnabled(false);
-            return;
+            h.increaseGold(v.getGold());
+            h.increaseXp(v.getXp());
+            Random r = new Random();
+            v = horda.get(r.nextInt(horda.size()));
         }
+        
+        reload();
     }//GEN-LAST:event_btnLutaActionPerformed
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        btnLuta.setEnabled(true);
-        
-        h.setLife(100);
-        v.setLife(100);
-        
-        lblHeroi.setText(h.getName());
-        pbVidaHeroi.setValue(h.getLife());
-        lblVidaH.setText(String.valueOf(h.getLife()));
-        
-        lblVilao.setText(v.getName());
-        pbVidaVilao.setValue(v.getLife());
-        lblVidaV.setText(String.valueOf(v.getLife()));
+//        btnLuta.setEnabled(true);
+//        
+//        h.setLife(100);
+//        v.setLife(100);
+//        
+//        lblHeroi.setText(h.getName());
+//        pbVidaHeroi.setValue(h.getLife());
+//        lblVidaH.setText(String.valueOf(h.getLife()));
+//        
+//        lblVilao.setText(v.getName());
+//        pbVidaVilao.setValue(v.getLife());
+//        lblVidaV.setText(String.valueOf(v.getLife()));
     }//GEN-LAST:event_btnStartActionPerformed
 
     private void btnBagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBagActionPerformed
         Inventario i = new Inventario(h);
         i.setVisible(true);
     }//GEN-LAST:event_btnBagActionPerformed
-
+    private void reload(){
+        //info heroi
+        lblHeroi.setText(h.getName());
+        pbVidaHeroi.setValue(h.getVidaAtual());
+        lblVidaH.setText(String.valueOf(h.getVidaAtual()));
+        lblLife.setText("LIFE:" + h.getLife());
+        lblAtt.setText("ATT: " + h.getAttack());
+        lblDef.setText("DEF: " + h.getDefense());
+        
+        
+        //info vilao
+        lblVilao.setText(v.getName());
+        pbVidaVilao.setValue(v.getLife());
+        lblVidaV.setText(String.valueOf(v.getLife()));
+        
+        
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -275,7 +311,6 @@ public class Jogo extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 //new Jogo().setVisible(true);
-                //World_of_Zuul a = new World_of_Zuul();
                 
             }
         });
@@ -286,10 +321,10 @@ public class Jogo extends javax.swing.JFrame {
     private javax.swing.JButton btnBag;
     private javax.swing.JButton btnLuta;
     private javax.swing.JButton btnStart;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel lblAtt;
+    private javax.swing.JLabel lblDef;
     private javax.swing.JLabel lblHeroi;
+    private javax.swing.JLabel lblLife;
     private javax.swing.JLabel lblVidaH;
     private javax.swing.JLabel lblVidaV;
     private javax.swing.JLabel lblVilao;

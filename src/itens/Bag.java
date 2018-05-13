@@ -7,13 +7,11 @@ package itens;
 
 import java.math.BigDecimal;
 import java.sql.Array;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import tela.Jogo;
 
 /**
  *
@@ -41,9 +39,7 @@ public class Bag {
     
     private void load(){
         try{
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "user", "pw");
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(LOAD + ID + ";");
+            ResultSet rs = Jogo.c.getRS(LOAD + ID + ";");
             
             rs.next();
             Array in = rs.getArray("itens");
@@ -53,7 +49,7 @@ public class Bag {
                 Item n = new Item();
                 for(BigDecimal id : l){
                     
-                    rs = st.executeQuery("SELECT id_item, name, attack, defense, tipo FROM itens WHERE id_item = " + id + ";");
+                    rs = Jogo.c.getRS("SELECT id_item, name, attack, defense, tipo FROM itens WHERE id_item = " + id + ";");
                     if(rs.next()){
                         n = new Item(rs.getInt("id_item"), rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
                     }
@@ -62,8 +58,6 @@ public class Bag {
                 }
             }
             
-            
-            con.close();
         }
         catch(Exception ex){
             Logger.getLogger(Bag.class.getName()).log(Level.SEVERE, null, ex);

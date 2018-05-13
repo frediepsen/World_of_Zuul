@@ -105,6 +105,7 @@ public class Inicio extends javax.swing.JFrame {
             
             b = st.execute("SELECT id FROM herois WHERE id = " + id + " AND password = \'" + senha + "\';");
             
+            con.close();
         }
         catch(Exception e){
             Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, e);

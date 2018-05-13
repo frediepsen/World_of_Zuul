@@ -27,10 +27,10 @@ public class Luta {
         }
         else{
             if(v > h){
-                heroi.setLife(heroi.getLife() - vilao.getAttack());
+                heroi.setVidaAtual(heroi.getLife() - vilao.getAttack());
             }
             else{
-                heroi.setLife(heroi.getLife() - vilao.getAttack());
+                heroi.setVidaAtual(heroi.getLife() - vilao.getAttack());
                 vilao.setLife(vilao.getLife() - heroi.getAttack());
             }
         }

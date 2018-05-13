@@ -6,13 +6,11 @@
 package personagens;
 
 import itens.Item;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import tela.Jogo;
 
 /**
  *
@@ -32,6 +30,7 @@ public class Setup {
     private final String LOAD = "SELECT head, chest, right_hand, left_hand, legs, arms FROM setups WHERE id_setup = ";
     private final String UPDATE1 = "UPDATE setups SET ";
     private final String UPDATE2 = "WHERE id_setup = ";
+    private final String SELECT = "SELECT attack, defense, name, tipo FROM itens WHERE id_item = ";
     
     public Setup(long id){
         this.ID = id;
@@ -46,9 +45,7 @@ public class Setup {
     
     private void load(){
         try{
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "user", "pw");
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(LOAD + ID + ";");
+            ResultSet rs = Jogo.c.getRS(LOAD + ID + ";");
         
             Item i = new Item();
             rs.next();
@@ -61,7 +58,7 @@ public class Setup {
             long idArms = rs.getLong("arms");
             
             if(idHead > 0){
-                rs = st.executeQuery("SELECT attack, defense, name, tipo FROM itens WHERE id_item = " + idHead + ";");
+                rs = Jogo.c.getRS(SELECT + idHead + ";");
                 if(rs.next()){
                     i = new Item(idHead, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
                     i.setEquipped(true);
@@ -69,7 +66,7 @@ public class Setup {
                 head = i;
             }
             if(idChest > 0){
-                rs = st.executeQuery("SELECT attack, defense, name, tipo FROM itens WHERE id_item = " + idChest + ";");
+                rs = Jogo.c.getRS(SELECT + idChest + ";");
                 if(rs.next()){
                     i = new Item(idChest, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
                 }
@@ -77,7 +74,7 @@ public class Setup {
                 chest = i;
             }
             if(idRightHand > 0){
-                rs = st.executeQuery("SELECT attack, defense, name, tipo FROM itens WHERE id_item = " + idRightHand + ";");
+                rs = Jogo.c.getRS(SELECT + idRightHand + ";");
                 if(rs.next()){
                     i = new Item(idRightHand, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
                 }
@@ -85,7 +82,7 @@ public class Setup {
                 rightHand = i;
             }
             if(idLeftHand > 0){
-                rs = st.executeQuery("SELECT attack, defense, name, tipo FROM itens WHERE id_item = " + idLeftHand + ";");
+                rs = Jogo.c.getRS(SELECT + idLeftHand + ";");
                 if(rs.next()){
                     i = new Item(idLeftHand, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
                 }
@@ -93,7 +90,7 @@ public class Setup {
                 leftHand = i;
             }
             if(idLegs > 0){
-                rs = st.executeQuery("SELECT attack, defense, name, tipo FROM itens WHERE id_item = " + idLegs + ";");
+                rs = Jogo.c.getRS(SELECT + idLegs + ";");
                 if(rs.next()){
                     i = new Item(idLegs, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
                 }
@@ -101,7 +98,7 @@ public class Setup {
                 legs = i;
             }
             if(idArms > 0){
-                rs = st.executeQuery("SELECT attack, defense, name, tipo FROM itens WHERE id_item = " + idArms + ";");
+                rs = Jogo.c.getRS(SELECT + idArms + ";");
                 if(rs.next()){
                     i = new Item(idArms, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
                 }
@@ -109,8 +106,6 @@ public class Setup {
                 arms = i;
             }
             
-            con.close();
-        
         }
         catch(SQLException e){
             Logger.getLogger(Setup.class.getName()).log(Level.SEVERE, null, e);
@@ -188,16 +183,6 @@ public class Setup {
     }
     
     private void update(String campo){
-        try{
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jogo", "user", "pw");
-            Statement st = con.createStatement();
-            st.executeUpdate(UPDATE1 + campo + UPDATE2 + ID + ";");
-            
-            con.close();
-        }
-        catch(Exception e){
-            Logger.getLogger(Setup.class.getName()).log(Level.SEVERE, null, e);
-            System.out.println("Erro no update/setup");
-        }
+        Jogo.c.executaQ(UPDATE1 + campo + UPDATE2 + ID + ";");
     }
 }
