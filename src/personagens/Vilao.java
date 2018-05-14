@@ -15,12 +15,12 @@ public class Vilao extends Status{
     private final String name;
     private final int gold;
     private final int xp;
-    private Random r;
+    private int vidaMax;
     
     public Vilao(Vilao v) {
         super(v.getAttack(), v.getDefense(), v.getLife());
         this.name = v.name;
-        r  = new Random();
+        vidaMax = v.getLife();
         gold = v.gold;
         xp = v.xp;
     }
@@ -28,17 +28,13 @@ public class Vilao extends Status{
     public Vilao(String name, int vida, int att, int def) {
         super(att, def, vida);
         this.name = name;
-        r  = new Random();
+        vidaMax = vida;
         gold = (int)((vida / 10) + (att / 5) + (def / 5));
         xp = (int)((vida / 8) + (att / 4) + (def / 4));
     }
 
     public String getName() {
         return name;
-    }
-    
-    public int sorte(){
-        return r.nextInt(9);
     }
 
     public int getGold() {
@@ -48,6 +44,14 @@ public class Vilao extends Status{
     public int getXp() {
         return xp;
     }
+
+    public int getVidaMax() {
+        return vidaMax;
+    }
     
+    public void takeDamage(int damage){
+        float i = damage * (150 / (float)( this.getDefense()+100 ) );
+        this.setLife(this.getLife() - (int)i );
+    }
     
 }

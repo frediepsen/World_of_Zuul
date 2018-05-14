@@ -101,7 +101,7 @@ public class Jogo extends javax.swing.JFrame {
             Logger.getLogger(Jogo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        v = new Vilao(horda.get(1));
+        v = new Vilao(horda.get(0));
     }
     
     /**
@@ -226,34 +226,37 @@ public class Jogo extends javax.swing.JFrame {
     private void btnLutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLutaActionPerformed
         porrada.pancadaria();
         
-        if(h.getLife() <= 0){
+        if(h.getVidaAtual() <= 0){
             btnLuta.setEnabled(false);
         }
         if(v.getLife() <= 0){
+            int i = h.getLevel();
             h.increaseGold(v.getGold());
             h.increaseXp(v.getXp());
+            if(i != h.getLevel()){
+                new LevelUp(h, h.getLevel()-i).setVisible(true);
+            }
             Random r = new Random();
             v = new Vilao(horda.get(r.nextInt(horda.size())));
             pbVidaVilao.setMaximum(v.getLife());
             porrada.setVilao(v);
+            
         }
         
         reload();
     }//GEN-LAST:event_btnLutaActionPerformed
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-//        btnLuta.setEnabled(true);
-//        
-//        h.setLife(100);
-//        v.setLife(100);
-//        
-//        lblHeroi.setText(h.getName());
-//        pbVidaHeroi.setValue(h.getLife());
-//        lblVidaH.setText(String.valueOf(h.getLife()));
-//        
-//        lblVilao.setText(v.getName());
-//        pbVidaVilao.setValue(v.getLife());
-//        lblVidaV.setText(String.valueOf(v.getLife()));
+        btnLuta.setEnabled(true);
+        
+        h.setVidaAtual(h.getLife());
+        v.setLife(v.getVidaMax());
+        
+        pbVidaHeroi.setValue(h.getVidaAtual());
+        lblVidaH.setText(String.valueOf(h.getLife()));
+        
+        pbVidaVilao.setValue(v.getLife());
+        lblVidaV.setText(String.valueOf(v.getLife()));
     }//GEN-LAST:event_btnStartActionPerformed
 
     private void btnBagActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBagActionPerformed
@@ -274,7 +277,6 @@ public class Jogo extends javax.swing.JFrame {
         lblVilao.setText(v.getName());
         pbVidaVilao.setValue(v.getLife());
         lblVidaV.setText(String.valueOf(v.getLife()));
-        
         
     }
     

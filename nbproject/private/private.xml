@@ -5,26 +5,23 @@
             <url>src/itens/Bag.java</url>
             <bookmark id="1">
                 <name/>
-                <line>63</line>
+                <line>59</line>
                 <key/>
             </bookmark>
             <bookmark id="3">
                 <name/>
-                <line>65</line>
+                <line>59</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/World_of_Zuul/src/personagens/Setup.java</file>
+            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/World_of_Zuul/src/personagens/Vilao.java</file>
             <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/World_of_Zuul/src/tela/Jogo.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/World_of_Zuul/src/itens/Bag.java</file>
             <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/World_of_Zuul/src/world_of_zuul/Luta.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/World_of_Zuul/src/tela/Inventario.java</file>
             <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/World_of_Zuul/src/tela/Inicio.java</file>
             <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/World_of_Zuul/src/connect/Connect.java</file>
-            <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/World_of_Zuul/src/itens/Item.java</file>
             <file>file:/C:/Users/Usuario/Documents/NetBeansProjects/World_of_Zuul/src/personagens/Heroi.java</file>
         </group>
     </open-files>

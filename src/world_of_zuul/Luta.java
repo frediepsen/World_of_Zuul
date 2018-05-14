@@ -1,5 +1,6 @@
 package world_of_zuul;
 
+import java.util.Random;
 import personagens.Heroi;
 import personagens.Vilao;
 
@@ -12,26 +13,28 @@ public class Luta {
     
     private int h;
     private int v;
+    private Random r;
     
     public Luta(Heroi h, Vilao v){
         this.heroi = h;
         this.vilao = v;
+        this.r = new Random();
     }
     
     public void pancadaria(){
-        h = heroi.sorte();
-        v = vilao.sorte();
+        h = r.nextInt(99);
+        v = r.nextInt(99);
         
         if(h > v){
-            vilao.setLife(vilao.getLife() - heroi.getAttack());
+            vilao.takeDamage(heroi.getAttack());
         }
         else{
             if(v > h){
-                heroi.setVidaAtual(heroi.getVidaAtual()- vilao.getAttack());
+                heroi.takeDamage(vilao.getAttack());
             }
             else{
-                heroi.setVidaAtual(heroi.getVidaAtual()- vilao.getAttack());
-                vilao.setLife(vilao.getLife() - heroi.getAttack());
+                heroi.takeDamage(vilao.getAttack());
+                vilao.takeDamage(heroi.getAttack());
             }
         }
     }

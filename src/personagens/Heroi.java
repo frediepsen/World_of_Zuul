@@ -9,6 +9,7 @@ import itens.Bag;
 import itens.Item;
 import java.util.Random;
 import tela.Jogo;
+import tela.LevelUp;
 
 /**
  * @author USUARIO
@@ -22,7 +23,6 @@ public class Heroi extends Status{
     private int xpMax;
     private int xp;
     private final Setup setup;
-    private Random r = new Random();
     private final Bag bag;
     private int gold;
     
@@ -58,22 +58,19 @@ public class Heroi extends Status{
         return name;
     }
     
-    public int sorte(){
-        return r.nextInt(9);
-    }
-    
     public void increaseXp(int xp){
         this.xp += xp;
-        System.out.println(this.xp);
-        while(xp >= xpMax){
+        while(this.xp >= xpMax){
             levelUp();
         }
-        update("xp_max = " + xpMax + ", xp = " + this.xp + ", level = " + level);
+        System.out.println(this.xp);
+        update( "xp=" + this.xp);
     }
     private void levelUp(){
         level ++;
         xp = xp - xpMax;
         xpMax = xpMax + (int)(xpMax * 0.17);
+        update("level=" + this.level + ", xp_max=" + this.xpMax);
     }
 
     public int getVidaAtual() {
@@ -91,6 +88,11 @@ public class Heroi extends Status{
     public void increaseGold(int g){
         this.gold += g;
         update("gold = " + this.gold);
+    }
+    
+    public void takeDamage(int damage){
+        float i = damage * (150 / (float)( this.getDefense()+100 ) );
+        this.setVidaAtual(this.getVidaAtual() - (int)i );
     }
     
     public void equip(Item i){
@@ -138,5 +140,11 @@ public class Heroi extends Status{
     
     public Bag getBag(){
         return new Bag(bag);
+    }
+    
+    public void save(){
+        Jogo.c.executaQ("UPDATE herois SET life=" + this.getLife() + ", attack=" + this.getAttack() + ", defense=" + this.getDefense() 
+                        + ", level=" + this.level + ", xp=" + this.xp + ", xp_max=" + this.xpMax + ", gold=" + this.gold + " WHERE id = " 
+                        + ID);
     }
 }
