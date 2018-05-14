@@ -187,6 +187,7 @@ public class LevelUp extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMinusLifeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinusLifeActionPerformed

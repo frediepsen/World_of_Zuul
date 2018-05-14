@@ -16,8 +16,9 @@ import personagens.Heroi;
 public class Inventario extends javax.swing.JFrame {
 
     
-    private DefaultTableModel model;
-    private Heroi h;
+    private final DefaultTableModel model;
+    private final Heroi h;
+    private int size;
     /**
      * Creates new form Inventario
      * @param h
@@ -38,6 +39,7 @@ public class Inventario extends javax.swing.JFrame {
             rowData[4] = i.isEquipped();
             rowData[5] = i.getId();
             model.addRow(rowData);
+            size++;
         }
         
     }
@@ -54,6 +56,7 @@ public class Inventario extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tbBag = new javax.swing.JTable();
         btnEquip = new javax.swing.JButton();
+        btnUnequip = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -106,6 +109,13 @@ public class Inventario extends javax.swing.JFrame {
             }
         });
 
+        btnUnequip.setText("Unequip");
+        btnUnequip.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnequipActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -116,13 +126,17 @@ public class Inventario extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnEquip)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnUnequip)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(btnEquip)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEquip)
+                    .addComponent(btnUnequip))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -145,8 +159,16 @@ public class Inventario extends javax.swing.JFrame {
         
     }//GEN-LAST:event_formWindowClosed
 
+    private void btnUnequipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnequipActionPerformed
+        // TODO add your handling code here:
+        int row = tbBag.getSelectedRow();
+        long id = (long) tbBag.getValueAt(row, 5);
+        h.unequip(h.getBag().findItemById(id));
+        reload();
+    }//GEN-LAST:event_btnUnequipActionPerformed
+
     private void reload(){
-        model.setColumnCount(0);
+        model.setRowCount(0);
         Object[] rowData = new Object[6];
         
         for(Item i : h.getBag().getItens()){
@@ -196,6 +218,7 @@ public class Inventario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEquip;
+    private javax.swing.JButton btnUnequip;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tbBag;
     // End of variables declaration//GEN-END:variables

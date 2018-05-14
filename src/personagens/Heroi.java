@@ -39,7 +39,7 @@ public class Heroi extends Status{
         this.xpMax = xp_max;
         this.gold = gold;
         this.bag = new Bag(bag);
-        this.setup = new Setup(setup);
+        this.setup = new Setup(setup, this.bag);
     }
     
     public int getLevel() {
@@ -126,6 +126,45 @@ public class Heroi extends Status{
                 setAttack(this.getAttack() - setup.getLeftHand().getAttack() + i.getAttack());
                 setDefense(this.getDefense() - setup.getLeftHand().getDefense() + i.getDefense());
                 setup.setLeftHand(i);
+                break;
+            case DHAND:
+                break;
+        }
+        
+        update("attack = " + getAttack() + ", defense = " + getDefense());
+    }
+    
+    public void unequip(Item i){
+        switch(i.getType()){
+            case HEAD:
+                setAttack(this.getAttack() - setup.getHead().getAttack());
+                setDefense(this.getDefense() - setup.getHead().getDefense());
+                setup.setHead(new Item(0, "", 0, 0, "HEAD"));
+                break;
+            case CHEST:
+                setAttack(this.getAttack() - setup.getChest().getAttack());
+                setDefense(this.getDefense() - setup.getChest().getDefense());
+                setup.setChest(new Item(0, "", 0, 0, "CHEST"));
+                break;
+            case LEGS:
+                setAttack(this.getAttack() - setup.getLegs().getAttack());
+                setDefense(this.getDefense() - setup.getLegs().getDefense());
+                setup.setLegs(new Item(0, "", 0, 0, "LEGS"));
+                break;
+            case ARMS:
+                setAttack(this.getAttack() - setup.getArms().getAttack());
+                setDefense(this.getDefense() - setup.getArms().getDefense());
+                setup.setArms(new Item(0, "", 0, 0, "ARMS"));
+                break;
+            case RHAND:
+                setAttack(this.getAttack() - setup.getRightHand().getAttack());
+                setDefense(this.getDefense() - setup.getRightHand().getDefense());
+                setup.setRightHand(new Item(0, "", 0, 0, "RHAND"));
+                break;
+            case LHAND:
+                setAttack(this.getAttack() - setup.getLeftHand().getAttack());
+                setDefense(this.getDefense() - setup.getLeftHand().getDefense());
+                setup.setLeftHand(new Item(0, "", 0, 0, "LHAND"));
                 break;
             case DHAND:
                 break;

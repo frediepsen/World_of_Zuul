@@ -5,6 +5,7 @@
  */
 package personagens;
 
+import itens.Bag;
 import itens.Item;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,7 +33,7 @@ public class Setup {
     private final String UPDATE2 = "WHERE id_setup = ";
     private final String SELECT = "SELECT attack, defense, name, tipo FROM itens WHERE id_item = ";
     
-    public Setup(long id){
+    public Setup(long id, Bag b){
         this.ID = id;
         head = new Item();
         chest = new Item();
@@ -40,14 +41,14 @@ public class Setup {
         leftHand = new Item();
         legs = new Item();
         arms = new Item();
-        load();        
+        load(b);        
     }
     
-    private void load(){
+    private void load(Bag b){
         try{
             ResultSet rs = Jogo.c.getRS(LOAD + ID + ";");
         
-            Item i = new Item();
+            Item i;
             rs.next();
             
             long idHead = rs.getLong("head");
@@ -58,50 +59,34 @@ public class Setup {
             long idArms = rs.getLong("arms");
             
             if(idHead > 0){
-                rs = Jogo.c.getRS(SELECT + idHead + ";");
-                if(rs.next()){
-                    i = new Item(idHead, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
-                    i.setEquipped(true);
-                }
+                
+                i = b.findItemById(idHead);
+                i.setEquipped(true);
                 head = i;
             }
             if(idChest > 0){
-                rs = Jogo.c.getRS(SELECT + idChest + ";");
-                if(rs.next()){
-                    i = new Item(idChest, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
-                }
+                
+                i = b.findItemById(idChest);
                 i.setEquipped(true);
                 chest = i;
             }
             if(idRightHand > 0){
-                rs = Jogo.c.getRS(SELECT + idRightHand + ";");
-                if(rs.next()){
-                    i = new Item(idRightHand, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
-                }
+                i = b.findItemById(idRightHand);
                 i.setEquipped(true);
                 rightHand = i;
             }
             if(idLeftHand > 0){
-                rs = Jogo.c.getRS(SELECT + idLeftHand + ";");
-                if(rs.next()){
-                    i = new Item(idLeftHand, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
-                }
+                i = b.findItemById(idLeftHand);
                 i.setEquipped(true);
                 leftHand = i;
             }
             if(idLegs > 0){
-                rs = Jogo.c.getRS(SELECT + idLegs + ";");
-                if(rs.next()){
-                    i = new Item(idLegs, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
-                }
+                i = b.findItemById(idLegs);
                 i.setEquipped(true);
                 legs = i;
             }
             if(idArms > 0){
-                rs = Jogo.c.getRS(SELECT + idArms + ";");
-                if(rs.next()){
-                    i = new Item(idArms, rs.getString("name"), rs.getInt("attack"), rs.getInt("defense"), rs.getString("tipo"));
-                }
+                i = b.findItemById(idArms);
                 i.setEquipped(true);
                 arms = i;
             }
